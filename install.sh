@@ -33,7 +33,6 @@ docker exec -it master-db /bin/bash -c 'pg_basebackup -h master-db -U replicator
 
 docker cp master-db:/tmp/postgresslave /$PWD/
 
-echo "setting up replica-db"
 docker run --name replica-db -d -p 15433:5432 -e POSTGRES_DB=test -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_USER=postgres -v /$PWD/postgresslave:/var/lib/postgresql/data --net test postgres:latest
 
 sleep 5
