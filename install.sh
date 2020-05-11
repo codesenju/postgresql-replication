@@ -3,9 +3,9 @@
 docker network create test
 echo "Created network 'test'"
 
-docker run --name master-db -d -p 5432:5432 --net test -e POSTGRES_DB=test -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_USER=postgres -v /$PWD/postgres:/var/lib/postgresql/data postgres:latest
+docker run --name master-db -d -p 15432:5432 --net test -e POSTGRES_DB=test -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_USER=postgres -v /$PWD/postgres:/var/lib/postgresql/data postgres:latest
 sleep 10
-echo "master-db container running on port 5432"
+echo "master-db container running on port 15432"
 
 # wait 20 seconds
 echo "wait 20 sec…"
@@ -34,10 +34,10 @@ docker exec -it master-db /bin/bash -c 'pg_basebackup -h master-db -U replicator
 docker cp master-db:/tmp/postgresslave /$PWD/
 
 echo "setting up replica-db"
-docker run --name replica-db -d -p 5433:5432 -e POSTGRES_DB=test -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_USER=postgres -v /$PWD/postgresslave:/var/lib/postgresql/data --net test postgres:latest
+docker run --name replica-db -d -p 15433:5432 -e POSTGRES_DB=test -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_USER=postgres -v /$PWD/postgresslave:/var/lib/postgresql/data --net test postgres:latest
 
 sleep 2
-echo "replica-db container running on port 5433"
+echo "replica-db container running on port 15433"
 
 #TEST
 sleep 2
