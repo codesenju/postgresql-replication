@@ -24,11 +24,11 @@ docker exec -it master-db psql -U postgres -c "alter system set hot_standby = on
 docker exec -it master-db psql -U postgres -c "select pg_reload_conf()"
 
 # wait 8 seconds
-sleep 4 && echo "we're almost there..." && sleep 4
+sleep 4 && echo "We're almost done..." && sleep 4
 
-echo "master-db setup complete."
+echo "master-db setup complete"
 sleep 2
-echo "now setting up replica-db."
+echo "Now setting up replica-db"
 docker exec -it master-db /bin/bash -c 'pg_basebackup -h master-db -U replicator -p 5432 -D /tmp/postgresslave -Fp -Xs -P -Rv'
 
 docker cp master-db:/tmp/postgresslave /$PWD/
@@ -36,11 +36,13 @@ docker cp master-db:/tmp/postgresslave /$PWD/
 echo "setting up replica-db"
 docker run --name replica-db -d -p 15433:5432 -e POSTGRES_DB=test -e POSTGRES_HOST_AUTH_METHOD=trust -e POSTGRES_USER=postgres -v /$PWD/postgresslave:/var/lib/postgresql/data --net test postgres:latest
 
-sleep 2
+sleep 5
 echo "replica-db container running on port 15433"
 
 #TEST
-sleep 2
+sleep 5
 echo "Checking health…"
 sleep 10
 docker exec -it master-db psql -U postgres -c 'select * from pg_stat_replication;'
+sleep 1
+echo "Setup is complete"
