@@ -3,7 +3,7 @@ Isazi Consulting DevOps Assessment
 
 ### Prerequisite:
 
-* Make the file install.sh executable by the folowing command:
+* Make the file install.sh executable by running the folowing command:
 
 ``` bash
 sudo chmod +x install.sh
