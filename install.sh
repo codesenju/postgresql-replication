@@ -36,7 +36,7 @@ docker run --name replica-db -d -p 15433:5432 -e POSTGRES_DB=test -e POSTGRES_HO
 sleep 5
 echo "replica-db container running on port 15433"
 
-#TEST
+# TEST
 sleep 5
 echo "Checking health…"
 sleep 10
