@@ -3,7 +3,7 @@ Isazi Consulting DevOps Assessment
 
 ### Prerequisite:
 
-* Make the file install.sh executable by the folowing command:
+* Make the file install.sh executable by running the folowing command:
 
 ``` bash
 sudo chmod +x install.sh
@@ -16,7 +16,7 @@ sudo usermod -aG docker $(whoami)
 ```
 You will need to log out and back in as the same user to enable this change.
 
-
+### Setting up:
 * Running as other user:
 ```bash
 sudo ./install.sh
@@ -25,4 +25,9 @@ sudo ./install.sh
 * Running as root:
 ```bash
 ./install
+```
+### Deleting everything and starting all over again:
+
+```bash
+sudo ./reset.sh
 ```
