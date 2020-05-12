@@ -17,6 +17,12 @@ sudo usermod -aG docker $(whoami)
 You will need to log out and back in as the same user to enable this change.
 
 
+* Running as other user:
 ```bash
-./install.sh
+sudo ./install.sh
+```
+
+* Running as root:
+```bash
+./install
 ```
