@@ -22,7 +22,7 @@ You will need to log out and back in as the same user to enable this change.
 sudo ./install.sh
 ```
 
-### Deleting everything and starting all over again:
+### Delete everything and start all over:
 
 ```bash
 sudo ./reset.sh
