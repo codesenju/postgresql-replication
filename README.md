@@ -1,4 +1,4 @@
-# Postgres  Replication
+# How to Set Up Streaming Replication in PostgreSQL 12
 
 
 ### Prerequisite:
