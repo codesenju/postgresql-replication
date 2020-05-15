@@ -1,5 +1,5 @@
-# DevOpsAssessment-Isazi
-Isazi Consulting DevOps Assessment
+# Postgres  Replication
+
 
 ### Prerequisite:
 
