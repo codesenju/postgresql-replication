@@ -5,9 +5,9 @@ docker build -t replication/psql .
 docker run --name master-db -d -p 15432:5432 --net test -e POSTGRES_DB=test -e POSTGRES_HOST_AUTH_METHOD=trust -v /$PWD/postgres:/var/lib/postgresql/data replication/psql
 sleep 5
 echo "master-db container running on port 15432"
-sleep 5
-echo "Wait 20 seconds..."
-sleep 10 && echo "Loading..." && sleep 10
+sleep 6
+echo "Wait 24 seconds..."
+sleep 12 && echo "Loading..." && sleep 12
 echo "Starting backup"
 sleep 5
 docker exec -it master-db /bin/bash -c 'pg_basebackup -h master-db -U replicator -p 5432 -D /tmp/postgresslave -Fp -Xs -P -Rv' 
