@@ -1,6 +1,4 @@
-# DevOpsAssessment-Isazi
-Isazi Consulting DevOps Assessment
-
+# DevOps
 ### Prerequisite:
 
 * Make the file install.sh executable by running the folowing command:
