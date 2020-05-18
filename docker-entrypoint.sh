@@ -274,9 +274,8 @@ psql -U postgres -c "alter system set max_wal_senders = 18;" && \
 psql -U postgres -c "alter system set hot_standby = on;" && \
 echo host replication replicator 0.0.0.0/0 trust >> "$PGDATA/pg_hba.conf"
 echo "User Replicator added!"
-
-#pg_basebackup -h localhost -U replicator -p 5432 -D /tmp/postgresslave -Fp -Xs -P -Rv
 }
+
 _main() {
 	# if first arg looks like a flag, assume we want to run postgres server
 	if [ "${1:0:1}" = '-' ]; then
@@ -301,18 +300,17 @@ _main() {
 
 			docker_init_database_dir
 			pg_setup_hba_conf
-
+			
 			# PGPASSWORD is required for psql when authentication is required for 'local' connections via pg_hba.conf and is otherwise harmless
 			# e.g. when '--auth=md5' or '--auth-local=md5' is used in POSTGRES_INITDB_ARGS
 			export PGPASSWORD="${PGPASSWORD:-$POSTGRES_PASSWORD}"
 			docker_temp_server_start "$@"
 
 			docker_setup_db
+			docker_setup_replication
+		
 			docker_process_init_files /docker-entrypoint-initdb.d/*
 			
-			docker_setup_replication
-
-
 			docker_temp_server_stop
 			unset PGPASSWORD
 
