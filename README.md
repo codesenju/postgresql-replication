@@ -1,5 +1,4 @@
-# How to Set Up Streaming Replication in PostgreSQL 12
-
+# How to Set Up Streaming Replication in PostgreSQL v12
 
 ### Prerequisite:
 
