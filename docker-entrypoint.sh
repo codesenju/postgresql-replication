@@ -265,7 +265,7 @@ _pg_want_help() {
 	done
 	return 1
 }
-
+# configure postgresql for real-time replication
 docker_setup_replication(){
 psql -U postgres -c "CREATE USER replicator WITH REPLICATION ENCRYPTED PASSWORD 'passw0rd';" && \
 psql -U postgres -c "ALTER SYSTEM SET listen_addresses TO '*'" && \
