@@ -1,4 +1,5 @@
-# DevOps
+# How to Set Up Streaming Replication in PostgreSQL v12
+
 ### Prerequisite:
 
 * Make the file install.sh executable by running the folowing command:
