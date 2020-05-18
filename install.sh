@@ -13,9 +13,9 @@ sleep 10 && echo "Loading..." && sleep 10
 echo "Starting backup"
 docker exec -it master-db /bin/bash -c 'pg_basebackup -h master-db -U replicator -p 5432 -D /tmp/postgresslave -Fp -Xs -P -Rv' 
 docker cp master-db:/tmp/postgresslave /$PWD/ # copy backup data to current directory
-docker run --name replica-db -d -p 15433:5432 -e POSTGRES_DB=mydb -e POSTGRES_HOST_AUTH_METHOD=trust -v /$PWD/postgresslave:/var/lib/postgresql/data --net mynet replication/psql
+docker run --name slave-db -d -p 15433:5432 -e POSTGRES_DB=mydb -e POSTGRES_HOST_AUTH_METHOD=trust -v /$PWD/postgresslave:/var/lib/postgresql/data --net mynet replication/psql
 sleep 5
-echo "replica-db container running on port 15433"
+echo "slave-db container running on port 15433"
 # TEST
 sleep 5
 echo "Checking health…"
