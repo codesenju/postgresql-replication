@@ -28,7 +28,7 @@ pipeline {
 
     stage('Backup') {
       steps {
-        sh './backup.sh'
+        sh 'sudo ./backup.sh'
       }
     }
 
