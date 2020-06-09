@@ -8,7 +8,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'docker network rm mynet && docker network create mynet && docker pull codesenju/replication-psql:1.0'
+        sh 'docker network create mynet && docker pull codesenju/replication-psql:1.0'
         sh 'docker tag codesenju/replication-psql:1.0 replication/psql'
       }
     }
