@@ -59,6 +59,7 @@ pipeline {
         sleep 10
         sh '''docker exec -it master-db psql -U postgres \\
 -c \'select * from pg_stat_replication;\''''
+        echo 'Complete'
       }
     }
 
