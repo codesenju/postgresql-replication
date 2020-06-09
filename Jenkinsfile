@@ -15,9 +15,7 @@ pipeline {
 
     stage('MasterDB') {
       steps {
-        sh '''docker run --name master-db -d -p 15432:5432 --net mynet
--e POSTGRES_DB=mydb -e POSTGRES_HOST_AUTH_METHOD=trust
--v /$PWD/postgres:/var/lib/postgresql/data replication/psql'''
+        sh 'docker run --name master-db -d -p 15432:5432 --net mynet -e POSTGRES_DB=mydb -e POSTGRES_HOST_AUTH_METHOD=trust -v /$PWD/postgres:/var/lib/postgresql/data replication/psql'
       }
     }
 
