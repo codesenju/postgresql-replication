@@ -7,8 +7,14 @@ pipeline {
   }
   stages {
     stage('Build') {
+      agent {
+        node {
+          label 'host'
+        }
+
+      }
       steps {
-        sh 'docker network create mynet'
+        sh './reset && docker network create mynet'
         sh 'docker build -t replication/psql .'
         sh 'docker pull codesenju/replication-psql:1.0'
         sh 'docker tag codesenju/replication-psql:1.0 replication/psql'
