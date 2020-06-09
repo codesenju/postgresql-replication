@@ -23,7 +23,7 @@ pipeline {
 
     stage('Verify MasterDB') {
       steps {
-        sleep 10
+        sleep 20
         sh 'docker logs master-db'
       }
     }
