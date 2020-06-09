@@ -15,8 +15,8 @@ pipeline {
 
     stage('MasterDB') {
       steps {
-        sh '''docker run --name master-db -d -p 15432:5432 --net mynet \\
--e POSTGRES_DB=mydb -e POSTGRES_HOST_AUTH_METHOD=trust \\
+        sh '''docker run --name master-db -d -p 15432:5432 --net mynet
+-e POSTGRES_DB=mydb -e POSTGRES_HOST_AUTH_METHOD=trust
 -v /$PWD/postgres:/var/lib/postgresql/data replication/psql'''
       }
     }
@@ -30,9 +30,8 @@ pipeline {
 
     stage('Backup') {
       steps {
-        sh '''docker exec -it master-db /bin/bash \\
--c \'pg_basebackup -h master-db -U replicator -p 5432 \\
--D /tmp/postgresslave -Fp -Xs -P -Rv\''''
+        sh '''docker exec -it master-db /bin/bash
+-c \'pg_basebackup -h master-db -U replicator -p 5432 -D /tmp/postgresslave -Fp -Xs -P -Rv\''''
         sleep 10
         sh 'docker cp master-db:/tmp/postgresslave /$PWD/'
       }
@@ -40,8 +39,7 @@ pipeline {
 
     stage('SlaveDB') {
       steps {
-        sh '''docker run --name slave-db -d -p 15433:5432 --net mynet \\
--e POSTGRES_DB=mydb -e POSTGRES_HOST_AUTH_METHOD=trust \\
+        sh '''docker run --name slave-db -d -p 15433:5432 --net mynet -e POSTGRES_DB=mydb -e POSTGRES_HOST_AUTH_METHOD=trust
 -v /$PWD/postgresslave:/var/lib/postgresql/data replication/psql'''
       }
     }
@@ -49,8 +47,7 @@ pipeline {
     stage('Test') {
       steps {
         sleep 10
-        sh '''docker exec -it master-db psql -U postgres \\
--c \'select * from pg_stat_replication;\''''
+        sh 'docker exec -it master-db psql -U postgres -c \'select * from pg_stat_replication;\''
         echo 'Complete'
       }
     }
