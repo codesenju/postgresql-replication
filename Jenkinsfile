@@ -34,7 +34,7 @@ pipeline {
 
 
 chmod +x backup.sh'''
-        sh './backup'
+        sh './backup.sh'
       }
     }
 
