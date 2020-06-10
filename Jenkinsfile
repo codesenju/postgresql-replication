@@ -33,8 +33,8 @@ pipeline {
 
 
 
-chmod +x backup.sh'''
-        sh './backup.sh'
+docker exec -it master-db /bin/bash -c \'pg_basebackup -h master-db -U replicator -p 5432 -D /tmp/postgresslave -Fp -Xs -P -Rv\' '''
+        sh 'docker cp master-db:/tmp/postgresslave /$PWD/'
       }
     }
 
