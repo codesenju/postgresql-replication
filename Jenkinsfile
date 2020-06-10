@@ -41,15 +41,16 @@ docker exec master-db /bin/bash -c \'pg_basebackup -h master-db -U replicator -p
     stage('SlaveDB') {
       steps {
         sh 'docker run --name slave-db -d -p 15433:5432 -e POSTGRES_DB=mydb -e POSTGRES_HOST_AUTH_METHOD=trust -v /$PWD/postgresslave:/var/lib/postgresql/data --net mynet replication/psql'
+        sleep 2
       }
     }
 
     stage('Test') {
       steps {
-        sleep 10
-        sh 'docker exec -it master-db psql -U postgres -c \'select * from pg_stat_replication;\''
+        sleep 15
+        sh 'docker exec master-db psql -U postgres -c \'select * from pg_stat_replication;\''
         echo 'Complete'
-        cleanWs(cleanWhenFailure: true, cleanWhenAborted: true)
+        cleanWs(cleanWhenFailure: true, cleanWhenAborted: true, cleanWhenSuccess: true)
       }
     }
 
