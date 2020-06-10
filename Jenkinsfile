@@ -1,7 +1,7 @@
 pipeline {
   agent {
-    node {
-      label 'host'
+    docker {
+      image 'codesenju/staging:1.0'
     }
 
   }
