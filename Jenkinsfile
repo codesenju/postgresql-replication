@@ -40,8 +40,7 @@ docker exec master-db /bin/bash -c \'pg_basebackup -h master-db -U replicator -p
 
     stage('SlaveDB') {
       steps {
-        sh '''docker run --name slave-db -d -p 15433:5432 --net mynet -e POSTGRES_DB=mydb -e POSTGRES_HOST_AUTH_METHOD=trust
--v /$PWD/postgresslave:/var/lib/postgresql/data replication/psql'''
+        sh 'docker run --name slave-db -d -p 15433:5432 -e POSTGRES_DB=mydb -e POSTGRES_HOST_AUTH_METHOD=trust -v /$PWD/postgresslave:/var/lib/postgresql/data --net mynet replication/psql'
       }
     }
 
