@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'codesenju/staging:1.0'
+      image 'docker.io/codesenju/staging'
     }
 
   }
