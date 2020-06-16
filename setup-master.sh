@@ -7,3 +7,4 @@ psql -U postgres -c "alter system set max_wal_senders = 18;" && \
 psql -U postgres -c "alter system set hot_standby = on;" && \
 echo host replication replicator 0.0.0.0/0 trust >> "$PGDATA/pg_hba.conf"
 echo "User Replicator added!"
+
