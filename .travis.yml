@@ -2,8 +2,6 @@ language: ruby
 services:
   - docker
 
-before_install:
-  - docker build -t replication/psql .
-
 script:
   - docker images
+  - bash install.sh
