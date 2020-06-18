@@ -5,9 +5,9 @@ docker build -t psql-12/movie-db .
 sleep 1
 echo "Spinning up master-db container"
 docker run --name master-db -d -p 15432:5432 --net mynet -e POSTGRES_DB=movie -e POSTGRES_HOST_AUTH_METHOD=trust -v /$PWD/postgres:/var/lib/postgresql/data psql-12/movie-db
-sleep 5
+sleep 8
 echo "master-db container running on port 15432"
-sleep 5
+sleep 10
 echo "Wait 30 seconds"
 sleep 10 && echo "Populating tables with movie data" && sleep 10 && echo "Loading..." && sleep 10
 echo "Starting backup"
