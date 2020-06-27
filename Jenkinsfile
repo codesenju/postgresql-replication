@@ -16,7 +16,9 @@ ls
 '''
         sh '''      docker network create mynet
       echo "Created network \'mynet\'"
-      docker build -t psql-12/movie-db .'''
+      docker build -t psql-12/movie-db:${BUILD_NUMBER} .
+      docker tag psql-12/movie-db:${BUILD_NUMBER} psql-12/movie-db:latest
+      '''
         sleep 1
       }
     }
@@ -25,7 +27,7 @@ ls
       steps {
         sh '''
         echo "Spinning up master-db container"
-        docker run --name master-db -d -p 15432:5432 --net mynet -e POSTGRES_DB=movie -e POSTGRES_HOST_AUTH_METHOD=trust -v /$PWD/postgres:/var/lib/postgresql/data psql-12/movie-db
+        docker run --name master-db -d -p 15432:5432 --net mynet -e POSTGRES_DB=movie -e POSTGRES_HOST_AUTH_METHOD=trust -v /$PWD/postgres:/var/lib/postgresql/data psql-12/movie-db:${BUILD_NUMBER}
         sleep 8
         echo "master-db container running on port 15432"
         
@@ -57,7 +59,7 @@ docker cp master-db:/tmp/postgresslave /$PWD/ # copy backup data to current dire
 
     stage('SlaveDB') {
       steps {
-        sh 'docker run --name slave-db -d -p 15433:5432 -e POSTGRES_DB=movie -e POSTGRES_HOST_AUTH_METHOD=trust -v /$PWD/postgresslave:/var/lib/postgresql/data --net mynet psql-12/movie-db'
+        sh 'docker run --name slave-db -d -p 15433:5432 -e POSTGRES_DB=movie -e POSTGRES_HOST_AUTH_METHOD=trust -v /$PWD/postgresslave:/var/lib/postgresql/data --net mynet psql-12/movie-db:${BUILD_NUMBER}'
         sleep 2
       }
     }
