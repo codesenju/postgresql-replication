@@ -51,7 +51,6 @@ docker exec master-db /bin/bash -c \'pg_basebackup -h master-db -U replicator -p
         sleep 15
         sh 'docker exec master-db psql -U postgres -c \'select * from pg_stat_replication;\''
         echo 'Complete'
-        cleanWs(cleanWhenFailure: true, cleanWhenAborted: true, cleanWhenSuccess: true)
       }
     }
 
