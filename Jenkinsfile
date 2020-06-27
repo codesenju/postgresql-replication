@@ -13,7 +13,7 @@ pipeline {
 pwd
 ls
 chmod +x reset.sh
-./reset.sh'''
+reset.sh'''
         sh '''      docker network create mynet
       echo "Created network \'mynet\'"
       docker build -t psql-12/movie-db .'''
