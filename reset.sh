@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 docker rm -f master-db
 docker rm -f slave-db
 docker rmi -f psql-12/movie-db
