@@ -18,7 +18,6 @@ pipeline {
         sh '''whoami
 pwd
 ls
-./reset.sh
 '''
         sh '''      docker network create mynet
       echo "Created network \'mynet\'"
