@@ -23,7 +23,7 @@ ls
       }
     }
 
-    stage('MasterDB') {
+    stage('Master-db') {
       steps {
         sh '''
         echo "Spinning up master-db container"
@@ -35,7 +35,7 @@ ls
       }
     }
 
-    stage('Verify MasterDB') {
+    stage('Verify master-db') {
       steps {
         sleep 20
         sh 'docker logs master-db'
@@ -57,14 +57,14 @@ docker cp master-db:/tmp/postgresslave /$PWD/ # copy backup data to current dire
       }
     }
 
-    stage('SlaveDB') {
+    stage('Slave-db') {
       steps {
         sh 'docker run --name slave-db -d -p 15433:5432 -e POSTGRES_DB=movie -e POSTGRES_HOST_AUTH_METHOD=trust -v /$PWD/postgresslave:/var/lib/postgresql/data --net mynet psql-12/movie-db:${BUILD_NUMBER}'
         sleep 2
       }
     }
 
-    stage('Test') {
+    stage('Health Check') {
       steps {
         sleep 15
         sh 'docker exec master-db psql -U postgres -c \'select * from pg_stat_replication;\''
