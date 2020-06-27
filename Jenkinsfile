@@ -76,7 +76,12 @@ docker cp master-db:/tmp/postgresslave /$PWD/ # copy backup data to current dire
         echo 'Complete'
       }
     }
-
-
+      stage('Clean up') {
+      steps {
+        sh './reset.sh'
+      }
+      
+    }
+    
   }
 }
