@@ -47,7 +47,7 @@ ls
         echo "Wait 30 seconds"
 sleep 10 && echo "Populating tables with movie data" && sleep 10 && echo "Loading..." && sleep 10
 echo "Starting backup"
-docker exec -it master-db /bin/bash -c \'pg_basebackup -h master-db -U replicator -p 5432 -D /tmp/postgresslave -Fp -Xs -P -Rv\' 
+docker exec master-db /bin/bash -c \'pg_basebackup -h master-db -U replicator -p 5432 -D /tmp/postgresslave -Fp -Xs -P -Rv\' 
 sleep 5
 docker cp master-db:/tmp/postgresslave /$PWD/ # copy backup data to current directory
         '''
