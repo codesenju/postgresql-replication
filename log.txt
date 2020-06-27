@@ -1,0 +1,266 @@
+Started by user codesenju
+Obtained Jenkinsfile from git https://github.com/codesenju/postgresql-replication.git
+Running in Durability level: MAX_SURVIVABILITY
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/PostgresSQL-Replication
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+No credentials specified
+ > git rev-parse --is-inside-work-tree # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/codesenju/postgresql-replication.git # timeout=10
+Fetching upstream changes from https://github.com/codesenju/postgresql-replication.git
+ > git --version # timeout=10
+ > git fetch --tags --force --progress -- https://github.com/codesenju/postgresql-replication.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+ > git rev-parse refs/remotes/origin/origin/master^{commit} # timeout=10
+Checking out Revision 500f3313ea9547a24cfead18683f4ac2ce486dc2 (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 500f3313ea9547a24cfead18683f4ac2ce486dc2 # timeout=10
+Commit message: "Update reset.sh"
+ > git rev-list --no-walk 1d88aae49020358a17581325e913b42c7cb4c5bb # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] isUnix
+[Pipeline] sh
++ docker inspect -f . docker:dind
+.
+[Pipeline] withDockerContainer
+Jenkins seems to be running inside container 57b47ea6b35af02e24525dc9faf27135a8b9c0dc8fe5d953307d61f94c0f016d
+but /var/jenkins_home/workspace/PostgresSQL-Replication could not be found among []
+but /var/jenkins_home/workspace/PostgresSQL-Replication@tmp could not be found among []
+$ docker run -t -d -u 0:0 -v /var/run/docker.sock:/var/run/docker.sock -w /var/jenkins_home/workspace/PostgresSQL-Replication -v /var/jenkins_home/workspace/PostgresSQL-Replication:/var/jenkins_home/workspace/PostgresSQL-Replication:rw,z -v /var/jenkins_home/workspace/PostgresSQL-Replication@tmp:/var/jenkins_home/workspace/PostgresSQL-Replication@tmp:rw,z -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** docker:dind cat
+$ docker top 7eec9f431720891124d12bdabdf6755062903133f62d94cb3fba1c414d11eb1d -eo pid,comm
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Cloning Git)
+[Pipeline] git
+No credentials specified
+Warning: JENKINS-30600: special launcher org.jenkinsci.plugins.docker.workflow.WithContainerStep$Decorator$1@7d20e8ed; decorates hudson.Launcher$LocalLauncher@55a88466 will be ignored (a typical symptom is the Git executable not being run inside a designated container)
+ > git rev-parse --is-inside-work-tree # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/codesenju/postgresql-replication.git # timeout=10
+Fetching upstream changes from https://github.com/codesenju/postgresql-replication.git
+ > git --version # timeout=10
+ > git fetch --tags --force --progress -- https://github.com/codesenju/postgresql-replication.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/master^{commit} # timeout=10
+ > git rev-parse refs/remotes/origin/origin/master^{commit} # timeout=10
+Checking out Revision 500f3313ea9547a24cfead18683f4ac2ce486dc2 (refs/remotes/origin/master)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 500f3313ea9547a24cfead18683f4ac2ce486dc2 # timeout=10
+ > git branch -a -v --no-abbrev # timeout=10
+ > git branch -D master # timeout=10
+ > git checkout -b master 500f3313ea9547a24cfead18683f4ac2ce486dc2 # timeout=10
+Commit message: "Update reset.sh"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] sh
++ whoami
+root
++ pwd
+/var/jenkins_home/workspace/PostgresSQL-Replication
++ ls
+Dockerfile
+Jenkinsfile
+Jenkinsfile.Template
+README.md
+actors.tar.gz
+basics.tar.gz
+install.sh
+reset.sh
+setup-db.sh
+setup-master.sh
+[Pipeline] sh
++ docker network create mynet
+85e2048a21baf7aace935a748ef2ad35775ae764426d3458beb980c5e9755bc8
++ echo 'Created network '"'"'mynet'"'"
+Created network 'mynet'
++ docker build -t psql-12/movie-db:9 .
+Sending build context to Docker daemon  392.2MB
+Step 1/6 : FROM postgres:12
+ ---> b97bae343e06
+Step 2/6 : COPY ./setup-master.sh /docker-entrypoint-initdb.d/setup-master.sh
+ ---> Using cache
+ ---> 1a736087dd38
+Step 3/6 : COPY ./setup-db.sh /docker-entrypoint-initdb.d/setup-db.sh
+ ---> Using cache
+ ---> 235013c5a5d0
+Step 4/6 : WORKDIR /tables/
+ ---> Using cache
+ ---> ff2819ab1d7d
+Step 5/6 : COPY actors.tar.gz .
+ ---> Using cache
+ ---> 5f74ae1674a4
+Step 6/6 : COPY basics.tar.gz .
+ ---> Using cache
+ ---> f64999bae619
+Successfully built f64999bae619
+Successfully tagged psql-12/movie-db:9
++ docker tag psql-12/movie-db:9 psql-12/movie-db:latest
+[Pipeline] sleep
+Sleeping for 1 sec
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Master-db)
+[Pipeline] sh
++ echo 'Spinning up master-db container'
+Spinning up master-db container
++ docker run --name master-db -d -p 15432:5432 --net mynet -e 'POSTGRES_DB=movie' -e 'POSTGRES_HOST_AUTH_METHOD=trust' -v //var/jenkins_home/workspace/PostgresSQL-Replication/postgres:/var/lib/postgresql/data psql-12/movie-db:9
+ef37cf6283cee8ea77c1375fc395ba8b68f0767794419a60190c6bc8c386a30f
++ sleep 8
++ echo 'master-db container running on port 15432'
+master-db container running on port 15432
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Verify master-db)
+[Pipeline] sleep
+Sleeping for 20 sec
+[Pipeline] sh
++ docker logs master-db
+********************************************************************************
+WARNING: POSTGRES_HOST_AUTH_METHOD has been set to "trust". This will allow
+         anyone with access to the Postgres port to access your database without
+         a password, even if POSTGRES_PASSWORD is set. See PostgreSQL
+         documentation about "trust":
+         https://www.postgresql.org/docs/current/auth-trust.html
+         In Docker's default configuration, this is effectively any other
+         container on the same system.
+
+         It is not recommended to use POSTGRES_HOST_AUTH_METHOD=trust. Replace
+         it with "-e POSTGRES_PASSWORD=password" instead to set a password in
+         "docker run".
+********************************************************************************
+The files belonging to this database system will be owned by user "postgres".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "en_US.utf8".
+The default database encoding has accordingly been set to "UTF8".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /var/lib/postgresql/data ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... Etc/UTC
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+initdb: warning: enabling "trust" authentication for local connections
+You can change this by editing pg_hba.conf or using the option -A, or
+--auth-local and --auth-host, the next time you run initdb.
+
+Success. You can now start the database server using:
+
+    pg_ctl -D /var/lib/postgresql/data -l logfile start
+
+waiting for server to start....2020-06-27 19:07:57.797 UTC [46] LOG:  starting PostgreSQL 12.3 (Debian 12.3-1.pgdg100+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 8.3.0-6) 8.3.0, 64-bit
+2020-06-27 19:07:57.800 UTC [46] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2020-06-27 19:07:57.835 UTC [47] LOG:  database system was shut down at 2020-06-27 19:07:57 UTC
+2020-06-27 19:07:57.841 UTC [46] LOG:  database system is ready to accept connections
+ done
+server started
+CREATE DATABASE
+
+
+/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/setup-db.sh
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Backup)
+[Pipeline] sh
++ echo 'Wait 30 seconds'
+Wait 30 seconds
++ sleep 10
++ echo 'Populating tables with movie data'
+Populating tables with movie data
++ sleep 10
++ echo Loading...
+Loading...
++ sleep 10
++ echo 'Starting backup'
+Starting backup
++ docker exec master-db /bin/bash -c 'pg_basebackup -h master-db -U replicator -p 5432 -D /tmp/postgresslave -Fp -Xs -P -Rv'
+pg_basebackup: initiating base backup, waiting for checkpoint to complete
+pg_basebackup: checkpoint completed
+pg_basebackup: write-ahead log start point: 0/21000028 on timeline 1
+pg_basebackup: starting background WAL receiver
+pg_basebackup: created temporary replication slot "pg_basebackup_137"
+     0/589645 kB (0%), 0/1 tablespace (/tmp/postgresslave/backup_label    )
+  5098/589645 kB (0%), 0/1 tablespace (/tmp/postgresslave/base/1/2661     )
+ 60947/589645 kB (10%), 0/1 tablespace (/tmp/postgresslave/base/16384/16385)
+217811/589645 kB (36%), 0/1 tablespace (/tmp/postgresslave/base/16384/16385)
+322899/589645 kB (54%), 0/1 tablespace (/tmp/postgresslave/base/16384/16385)
+393876/589645 kB (66%), 0/1 tablespace (/tmp/postgresslave/base/16384/16388)
+465076/589645 kB (78%), 0/1 tablespace (/tmp/postgresslave/base/16384/16388)
+516020/589645 kB (87%), 0/1 tablespace (/tmp/postgresslave/base/16384/16388)
+562324/589645 kB (95%), 0/1 tablespace (/tmp/postgresslave/base/16384/16388)
+589655/589655 kB (100%), 0/1 tablespace (.../postgresslave/global/pg_control)
+589655/589655 kB (100%), 1/1 tablespace                                         
+pg_basebackup: write-ahead log end point: 0/21000138
+pg_basebackup: waiting for background process to finish streaming ...
+pg_basebackup: syncing data to disk ...
+pg_basebackup: base backup completed
++ sleep 5
++ docker cp master-db:/tmp/postgresslave //var/jenkins_home/workspace/PostgresSQL-Replication/
+[Pipeline] sleep
+Sleeping for 5 sec
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Slave-db)
+[Pipeline] sh
++ docker run --name slave-db -d -p 15433:5432 -e 'POSTGRES_DB=movie' -e 'POSTGRES_HOST_AUTH_METHOD=trust' -v //var/jenkins_home/workspace/PostgresSQL-Replication/postgresslave:/var/lib/postgresql/data --net mynet psql-12/movie-db:9
+049d04449e9f3ee15cbea40dc696b2dadf3a3700b841e0ec9821f0fbade4555f
+[Pipeline] sleep
+Sleeping for 2 sec
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Health Check)
+[Pipeline] sleep
+Sleeping for 15 sec
+[Pipeline] sh
++ docker exec master-db psql -U postgres -c 'select * from pg_stat_replication;'
+ pid | usesysid |  usename   | application_name | client_addr | client_hostname | client_port |         backend_start         | backend_xmin |   state   |  sent_lsn  | write_lsn  | flush_lsn  | replay_lsn |    write_lag    |    flush_lag    |   replay_lag    | sync_priority | sync_state |         reply_time          
+-----+----------+------------+------------------+-------------+-----------------+-------------+-------------------------------+--------------+-----------+------------+------------+------------+------------+-----------------+-----------------+-----------------+---------------+------------+-----------------------------
+ 141 |    16391 | replicator | walreceiver      | 172.21.0.3  |                 |       40936 | 2020-06-27 19:09:35.196278+00 |              | streaming | 0/2200B9F8 | 0/2200B9F8 | 0/2200B9F8 | 0/2200B9F8 | 00:00:00.001805 | 00:00:00.004663 | 00:00:00.004666 |             0 | async      | 2020-06-27 19:09:50.5746+00
+(1 row)
+
+[Pipeline] echo
+Complete
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Clean up)
+[Pipeline] sh
++ ./reset.sh
+master-db
+slave-db
+Untagged: psql-12/movie-db:latest
+mynet
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+$ docker stop --time=1 7eec9f431720891124d12bdabdf6755062903133f62d94cb3fba1c414d11eb1d
+$ docker rm -f 7eec9f431720891124d12bdabdf6755062903133f62d94cb3fba1c414d11eb1d
+[Pipeline] // withDockerContainer
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
