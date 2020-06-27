@@ -1,6 +1,6 @@
 pipeline {
   agent {
-   docker {
+    docker {
       image 'docker:dind-rootless'
       args '-v /var/run/docker.sock:/var/run/docker.sock'
     }
@@ -9,17 +9,15 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh label: '', script: './reset.sh'
-        sh '''
-       whoami
-       ls
-      
-      docker network create mynet
-      echo "Created network 'mynet'"
-      docker build -t psql-12/movie-db .
-      sleep 1
-        '''
-        
+        sh '''whoami
+pwd
+ls
+chmod +x reset.sh
+./reset.sh'''
+        sh '''      docker network create mynet
+      echo "Created network \'mynet\'"
+      docker build -t psql-12/movie-db .'''
+        sleep 1
       }
     }
 
@@ -49,7 +47,7 @@ pipeline {
         echo "Wait 30 seconds"
 sleep 10 && echo "Populating tables with movie data" && sleep 10 && echo "Loading..." && sleep 10
 echo "Starting backup"
-docker exec -it master-db /bin/bash -c 'pg_basebackup -h master-db -U replicator -p 5432 -D /tmp/postgresslave -Fp -Xs -P -Rv' 
+docker exec -it master-db /bin/bash -c \'pg_basebackup -h master-db -U replicator -p 5432 -D /tmp/postgresslave -Fp -Xs -P -Rv\' 
 sleep 5
 docker cp master-db:/tmp/postgresslave /$PWD/ # copy backup data to current directory
         '''
