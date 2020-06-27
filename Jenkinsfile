@@ -13,7 +13,7 @@ pipeline {
         sh '''
        whoami
        ls
-      docker network rm mynet
+      
       docker network create mynet
       echo "Created network 'mynet'"
       docker build -t psql-12/movie-db .
