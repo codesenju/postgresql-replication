@@ -9,6 +9,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
+        sh label: '', script: './reset.sh'
         sh '''
        whoami
        ls
