@@ -9,6 +9,10 @@ pipeline {
   stages {
     stage('Build') {
       steps {
+        sh '''
+        ls
+        ./reset
+        '''
         sh 'docker network create mynet'
         sh 'docker build -t replication/psql .'
       }
