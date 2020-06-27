@@ -16,6 +16,7 @@ pipeline {
     stage('Build') {
       steps {
         sh '''whoami
+        ./reset.sh
 pwd
 ls
 '''
