@@ -71,20 +71,7 @@ docker cp master-db:/tmp/postgresslave /$PWD/ # copy backup data to current dire
         echo 'Complete'
       }
     }
-    post {
-  always {
-    cleanWs()
-    dir("${env.WORKSPACE}@tmp") {
-      deleteDir()
-    }
-    dir("${env.WORKSPACE}@script") {
-      deleteDir()
-    }
-    dir("${env.WORKSPACE}@script@tmp") {
-      deleteDir()
-    }
-  }
-}
+
 
   }
 }
