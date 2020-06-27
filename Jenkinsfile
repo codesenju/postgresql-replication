@@ -7,6 +7,12 @@ pipeline {
 
   }
   stages {
+        stage('Cloning Git') {
+      steps {
+
+        git 'https://github.com/codesenju/postgresql-replication.git'
+      }
+    }
     stage('Build') {
       steps {
         sh '''whoami
