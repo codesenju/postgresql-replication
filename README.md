@@ -1,5 +1,7 @@
 # How to Set Up Streaming Replication in PostgreSQL v12
 
+### Article:
+[Medium - postgresql-12-setup-real-time-replication-between-two-databases](https://medium.com/@l.masubelele/postgresql-12-setup-real-time-replication-between-two-databases-e23663cfc4eb)
 ### Prerequisite:
 
 * Make the file install.sh executable by running the folowing command:
