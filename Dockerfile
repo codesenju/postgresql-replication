@@ -1,4 +1,4 @@
-FROM postgres:12
+FROM postgres:12-alpine
 COPY ./setup-master.sh /docker-entrypoint-initdb.d/setup-master.sh
 COPY ./setup-db.sh /docker-entrypoint-initdb.d/setup-db.sh
 WORKDIR /tables/
